@@ -30,6 +30,7 @@ def buildGraph(data):
 def buildHeader():
     return html.Header([
         html.H1("Soul Foods Pink Morsel Sales",
+        id="page-header",
         style={
             "textAlign": "center",
             "color": "#BA4560",
@@ -71,7 +72,7 @@ def buildRadioButtons():
         "marginBottom": "20px"
     })
 
-def main():
+def buildApp():
     data=loadData()
     app=Dash(__name__)
     app.layout = html.Div([
@@ -113,7 +114,11 @@ def main():
         figure.update_traces(line={"color": "#6CAEC6"})
 
         return figure
-    app.run(debug=True)
+    return app
+
+
+def main():
+    buildApp().run(debug=True)
 
 if __name__ == "__main__":
     main()
