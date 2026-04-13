@@ -30,5 +30,5 @@ def testVisualisation():
 
 def testRegionPicker():
     app = buildApp()
-    radio_buttons = findComponentUsingId(app.layout, "region-filter")
-    assert radio_buttons is not None
+    radioButtons = findComponentUsingId(app.layout, "region-filter")
+    assert radioButtons is not None
