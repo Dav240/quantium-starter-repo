@@ -1,19 +1,36 @@
-import csv
+from dash import html,Dash, dcc
+import pandas
+import plotly.express as px
 
-csvFiles = ["data/daily_sales_data_0.csv","data/daily_sales_data_1.csv","data/daily_sales_data_2.csv"]
+def buildGraph():
+    data = pandas.read_csv("output.csv")
+    data["Date"] = pandas.to_datetime(data["Date"])
 
-def priceToFloat(price):
-    return float(price.replace("$", ""))
+    salesOnDate = data.groupby("Date", as_index=False)["Sales"].sum()
 
-with open("output.csv", mode="w", newline="") as outputFile:
-    writer = csv.writer(outputFile, delimiter=",", quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    writer.writerow(["sales", "date", "region"])
-    for filePath in csvFiles:
-        with open(filePath, newline="") as csvFile:
-            reader = csv.reader(csvFile, delimiter=",", quotechar='"')
-            for row in reader:
-                if row[0] == "pink morsel":
-                    price = priceToFloat(row[1])
-                    quantity = int(row[2])
-                    writer.writerow([price*quantity, row[3], row[4]])
+    graph = px.line(
+        salesOnDate,
+        x="Date",
+        y="Sales",
+    )
+    return graph
+
+def buildHeader():
+    return html.Header([
+        html.H1("Soul Foods Pink Morsel Sales")
+    ])
+
+def main():
+    app=Dash(__name__)
+    app.layout = html.Div([
+        buildHeader(),
+        dcc.Graph(figure=buildGraph())
+    ])
+    app.run()
+
+if __name__ == "__main__":
+    main()
+
+
+
 
